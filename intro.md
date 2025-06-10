@@ -62,9 +62,14 @@ baseurl=ftp://192.168.10.60/pub/venu/BaseOS
 gpgcheck=1
 enabled=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
- ```  
 
-* install ansible -y
+ ```  
+* installing packages for ansible
+ ``` 
+  .dnf install ansible* -y
+  .dnf list ansible*
+  .dnf info ansible*
+ ```
 * confgure the epel repository
 * search epel-repository
 * Refer here[https://docs.fedoraproject.org/en-US/epel/getting-started/] 
