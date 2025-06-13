@@ -131,9 +131,82 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
  .touch ansible.cfg
  .touch .ansible.cfg
  ```
-* when user run a command as `ansible --version` from the above any one of them can be genrated,if now one create a own confuration file we get default configuration file
+* when user run a command as `ansible --version` from the above any one of them can be genrated,if now of them not create a own confuration file we get default configuration file for ansible
  ```
  vim /etc/ansible/ansible.cfg
  ```
+* configure ssh 
+ ```
+  ssh 192.168.10.60
+  ssh-keygen
+  ssh-copy-id -i id_rsa.pub 192.168.10.61   60->61
+ ```
+
+* vim /etc/hosts
+  ```
+  192.168.10.60  venu60.git.com  vhost1
+  192.168.10.61  venu61.git.com  vhost2
+  192.168.10.62  venu62.git.com  vhost3
+  ``` 
+* vim /etc/ansible/hosts
+ ```
+ vhost1
+ vhost2
+ vhost3
+ ``` 
+* test the ansible ping module
+ ```
+ ansible vhost1 -m ping
+ ansible vhost2 -m ping
+ ansible all -m ping
+ ansible vhost1 -m ping -o
+ ```  
+* ansible vhost1 -m ping
+ ```
+ vhost1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+ ``` 
+#### Ansible Inventories:
+* from `/etc/hosts to /etc/ansible/hosts`
+
+ ```
+* vim /etc/hosts 
+  192.168.10.60  venu60.git.com  vhost1
+  192.168.10.61  venu61.git.com   vhost2
+  192.168.10.62  venu62.git.com   vhost3
+ ```
+
+ ```
+ * vim /etc/ansible/hosts
+   vhost[1:3]
+ ``` 
+* ansible all -m ping
+ ```
+ vhost1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+vhost2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+
+ ```   
+
+
+  
+ 
+ 
 
 
