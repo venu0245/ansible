@@ -177,7 +177,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
  ```
 * vim /etc/hosts 
-  192.168.10.60  venu60.git.com  vhost1
+  192.168.10.60  venu60.git.com   vhost1
   192.168.10.61  venu61.git.com   vhost2
   192.168.10.62  venu62.git.com   vhost3
  ```
@@ -203,6 +203,71 @@ vhost2 | SUCCESS => {
     "ping": "pong"
 
  ```   
+#### Ansible group related hosts
+* vim /etc/ansible/hosts
+* vim /etc/hosts
+ ```
+ * vim /etc/ansible/hosts
+  [app]
+  vhost1
+  vhost2
+
+  [app]
+  vhost1
+  [web]
+  vhost2
+ ```
+* ansible all -m ping -o
+
+* port based variables 
+ ```
+ * vim /etc/ansible/hosts
+
+  vhost1 ansible_port=555
+  vhost2
+ ``` 
+* ansible all -m ping -o
+
+* user based variables
+ ```
+ * vim /etc/ansible/hosts
+
+  vhost1
+  vhost2 ansible_user=ansible
+ ``` 
+* ansible all -m ping -o
+
+#### Ansible group related variables
+ ```
+ * vim /etc/ansible/hosts
+   [app]
+  vhost1
+  [web]
+  vhost2
+
+  [web:vars]
+  ansible_port=555
+  [app]
+  ansible_user=ansible
+ ```
+* ansible all -m ping -o
+
+#### Ansible modules
+* modules are nothing but set of command and set of task
+
+* modules:
+ ```
+ ping
+ ps
+ copy
+ services
+ ls
+ top
+ vmstat
+ dnf
+ ```
+#### Ansible ad-hoc command: 
+* run a command on all hosts or vhost1 or group related hosts or group related variables 
 
 
   
