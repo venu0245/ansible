@@ -106,11 +106,11 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
   .Ansible Playbooks
   ```
   
-  Ansible_config                    Envirnomental Variables
+   Ansible_config             |       Envirnomental Variables
  --------------------------------------------------------------
- 1. ansible.cfg                    .in current working directory
- 2. .ansible.cfg                   .user's home directory
- 3. /etc/ansible/ansible.cfg       .system wide default directory
+ 1. ansible.cfg               |     .in current working directory
+ 2. .ansible.cfg              |     .user's home directory
+ 3. /etc/ansible/ansible.cfg  |     .system wide default directory
  
 * ansibile --version 
 1. Ansible configuration File:
@@ -218,6 +218,8 @@ vhost2 | SUCCESS => {
   vhost2
  ```
 * ansible all -m ping -o
+* ansible app -m ping
+* ansible web -m ping 
 
 * port based variables 
  ```
@@ -253,7 +255,7 @@ vhost2 | SUCCESS => {
 * ansible all -m ping -o
 
 #### Ansible modules
-* modules are nothing but set of command and set of task
+* modules are nothing but set of commands or set of task
 
 * modules:
  ```
@@ -267,7 +269,13 @@ vhost2 | SUCCESS => {
  dnf
  ```
 #### Ansible ad-hoc command: 
-* run a command on all hosts or vhost1 or group related hosts or group related variables 
+* run a command on all hosts or specific host or group related hosts or group related variables hosts
+ ```
+ ansible vhost1 -m command -a "ps"
+ ansible app -m command -a "uptime"
+ ansible [app:vars] -m command -a "date"
+ ansible all -m command -a "tail /etc/passwd"
+ ``` 
 
 
   
