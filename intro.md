@@ -89,10 +89,9 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
   venu62.git.com  192.168.10.62  
  ```
 * ansible configuration file in that can be copy the link and browse on web we can get and copy the file 
- ```
- .vim /etc/ansible/ansible.cfg
-  https://github.com/ansible/ansible/blob/stable-2.9/examples/ansible.cfg
- ``` 
+* vim /etc/ansible/ansible.cfg
+* Refer here[https://github.com/ansible/ansible/blob/stable-2.9/examples/ansible.cfg]
+  
  * setup passwordless login for `ssh-keygen` from all machines
 
  #### Ansible Core Components:
@@ -172,6 +171,17 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 }
 
  ``` 
+* if client server not available,we get
+
+ * ansible vhost2 -m ping
+ ```
+ vhost2 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host vhost2 port 22: No route to host",
+    "unreachable": true
+}
+
+ ``` 
 #### Ansible Inventories:
 * from `/etc/hosts to /etc/ansible/hosts`
 
@@ -201,7 +211,7 @@ vhost2 | SUCCESS => {
     },
     "changed": false,
     "ping": "pong"
-
+}
  ```   
 #### Ansible group related hosts
 * vim /etc/ansible/hosts
@@ -268,13 +278,32 @@ vhost2 | SUCCESS => {
  vmstat
  dnf
  ```
-#### Ansible ad-hoc command: 
+#### Ansible ad-hoc commands: 
 * run a command on all hosts or specific host or group related hosts or group related variables hosts
  ```
  ansible vhost1 -m command -a "ps"
  ansible app -m command -a "uptime"
  ansible [app:vars] -m command -a "date"
  ansible all -m command -a "tail /etc/passwd"
+ ``` 
+* create a file and directory
+ ```
+ ansible all -m file -a "path=web state=touch"
+ ansible all -m file -a "path=app state=directory"
+ ```
+* create a user and delete
+ ```
+ ansible all -m user -a "name=ram state=present"
+ ansible all -m user "id ram"
+ ansible all -m user -a "name=ram state=absent"
+ ```  
+* checking status of a service
+* sevice in ansible command line
+ ```
+ ansible all -m service -a "name=vsftpd.service state=status"
+ ansible all -m service -a "name=vsftpd.service state=restarted"
+ ansible all -m service -a "name=vsftpd.service state=stopped"
+  
  ``` 
 
 
