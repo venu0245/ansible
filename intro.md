@@ -294,7 +294,7 @@ vhost2 | SUCCESS => {
 * create a user and delete
  ```
  ansible all -m user -a "name=ram state=present"
- ansible all -m user "id ram"
+ ansible all -a "id ram"
  ansible all -m user -a "name=ram state=absent"
  ```  
 * checking status of a service
@@ -303,8 +303,133 @@ vhost2 | SUCCESS => {
  ansible all -m service -a "name=vsftpd.service state=status"
  ansible all -m service -a "name=vsftpd.service state=restarted"
  ansible all -m service -a "name=vsftpd.service state=stopped"
+ 
+ ```
+#### Ansible-Playbook:
+* create/delete a file module in ansible playbook
+ 
+ ```
+ . ansible all -m file -a "name=web state=touch"
+
+ - hosts: all
+   become: yes
+   tasks: 
+          - name: create a file
+            file:
+                  path: web
+                  state: touch
+
+ . ansible all -m file -a "name=web state=absent"
+
+  - hosts: all
+   become: yes
+   tasks:
+          - name: status of service
+            file:
+                     name: web
+                     state: absent
+                     
+  . ansible-playbook app.yml --syntax-check
+  . ansible-playbook app.yml                
+ ```  
+
+* create/delete a user module in ansible playbook 
+ 
+ ```
+ - hosts: vhost1
+   become: yes
+   tasks:
+          - name: create a user
+            user:
+                  name: preethi
+                  state: present
+                  remove: no
+
+  .ansible-playbook app1.yml --syntax-check
+  .ansible-playbook app.yml                
+              
+  .delete a user module in ansible playbook
+ 
+  - hosts: vhost1
+   become: yes
+   tasks:
+          - name: delete a user
+            user:
+                  name: preethi
+                  state: absent
+                  remove: yes
+
+  .ansible-playbook app1.yml --syntax-check
+  .ansible-playbook app1.yml   
+
+  ```
+* service module status,stopped,started in ansible playbook
+
+ ```
+  . ansible all -m service -a "name=nfs-server.service state=status"
+
+ - hosts: all
+   become: yes
+   tasks:
+          - name: status of service
+            service:
+                     name: nsfs-server.service
+                     state: status
+
+  . ansible all -m service -a "name=nfs-server.service state=stopped"
+
+ - hosts: all
+   become: yes
+   tasks:
+          - name: status of service
+            service:
+                     name: nsfs-server.service
+                     state: stopped
+
+  . ansible all -m service -a "name=nfs-server.service state=started"
+   
+ - hosts: all
+   become: yes
+   tasks:
+          - name: status of service
+            service:
+                     name: nsfs-server.service
+                     state: started  
+
+ .ansible-playbook app2.yml --syntax-check
+ .ansible-playbook app2.yml                      
+
+ ```
+
+* install and removed a package in ansible playbook 
+
+ ```
+  . ansible all -m dnf -a "name=httpd state=latest
+ 
+ - hosts: all
+   become: yes
+   tasks: 
+          - name: install a package
+            dnf:
+                 name: httpd
+                 state: latest
+ 
+  . remove a package in ansible playbook
+ 
+  . ansible all -m dnf -a "name=httpd state=removed
   
+ - hosts: all
+   become: yes
+   tasks:
+          - name: remove httpd package
+            dnf:
+                 name: httpd
+                 state: removed
+
+ . ansible-playbook app3.yml --syntax-check
+ . ansible-playbook app3.yml
  ``` 
+
 
 
   
