@@ -305,7 +305,12 @@ vhost2 | SUCCESS => {
  ansible all -m service -a "name=vsftpd.service state=stopped"
  
  ```
-#### Ansible-Playbook:
+#### Ansible Plays and Playbooks:
+* ansible play: consists of tasks to perform on client machines
+* ansible playbook: set of plays to execute on remote machines
+* ansible playbook are in yaml format
+* ansible playbook starts with --- at the top
+ 
 * create/delete a file module in ansible playbook
  
  ```
@@ -328,6 +333,9 @@ vhost2 | SUCCESS => {
             file:
                      name: web
                      state: absent
+
+  . become means gather the information about playbook
+  . gather_facts means collect the information about playbook                    
                      
   . ansible-playbook app.yml --syntax-check
   . ansible-playbook app.yml                
@@ -426,9 +434,123 @@ vhost2 | SUCCESS => {
                  name: httpd
                  state: removed
 
+ . install multiple packages
+  
+  - hosts: all
+    become: yes
+    tasks:
+            - name: installing packages
+              dnf:
+                   name:
+                      - httpd
+                      - bind
+                      - sysstat
+                   state: latest                        
+
  . ansible-playbook app3.yml --syntax-check
  . ansible-playbook app3.yml
+
  ``` 
+#### Ansible Facts:
+* Ansible facts are data gathered about target nodes (host nodes to be configured) and returned back to controller nodes. Ansible facts are stored in JSON format
+ ```
+ ansible-doc setup
+  ```
+ 
+  ```
+  .ansible all -m setup
+
+  - hosts: all
+    become: yes
+    tasks:
+            - name: ansible facts
+              debug:
+                     msg: "{{ ansible_facts }}"
+
+ .checking hostnames
+  - hosts: all
+    become: yes     
+    tasks:
+           - name: hostname
+             debug:
+                    msg: "{{ ansible_facts.hostame }}"
+
+ .checking selinux
+  - hosts: all
+    become: yes     
+    tasks:
+           - name: hostname
+             debug:
+                    msg: "{{ ansible_facts.selinux }}"                   
+  ```
+* checking all setup facts
+ ```
+ - hosts: vhost1
+  tasks:
+          - name: facts
+            debug:
+                    msg: "{{ ansible_facts.hostname }}"
+          - name: facts
+            debug:
+                    msg: "{{ ansible_facts.domain }}"
+          - name: selinux
+            debug:
+                    msg: "{{ ansible_facts.selinux }}"
+
+
+          - name: ip address
+            debug:
+                    msg: "{{ ansible_facts.all_ipv4_addresses }}"
+
+          - name: ethernet
+            debug:
+                    msg: "{{ ansible_facts.enp0s8 }}"
+    ============================================================================
+  . ansible-playbook app9.yml --syntax-check
+  . ansible-playbook app9.yml
+
+  . Result:
+  
+     TASK [Gathering Facts] ****************************************************************************************************************
+ok: [vhost1]
+
+TASK [facts] **************************************************************************************************************************
+ok: [vhost1] => {
+    "msg": "venu60"
+}
+
+TASK [facts] **************************************************************************************************************************
+ok: [vhost1] => {
+    "msg": "git.com"
+}
+
+TASK [selinux] ************************************************************************************************************************
+ok: [vhost1] => {
+    "msg": {
+        "config_mode": "enforcing",
+        "mode": "enforcing",
+        "policyvers": 33,
+        "status": "enabled",
+        "type": "targeted"
+    }
+}
+
+TASK [ip address] *********************************************************************************************************************
+ok: [vhost1] => {
+    "msg": [
+        "192.168.10.60",
+        "10.0.3.15",
+        "192.168.122.1"
+    ]
+
+ ```
+
+
+
+ 
+
+  
+  
 
 
 
