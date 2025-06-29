@@ -453,6 +453,7 @@ vhost2 | SUCCESS => {
  ``` 
 #### Ansible Facts:
 * Ansible facts are data gathered about target nodes (host nodes to be configured) and returned back to controller nodes. Ansible facts are stored in JSON format
+* Automatically gathered system information for decision-making in playbooks
  ```
  ansible-doc setup
   ```
@@ -510,7 +511,7 @@ vhost2 | SUCCESS => {
   . ansible-playbook app9.yml
 
   . Result:
-  
+
      TASK [Gathering Facts] ****************************************************************************************************************
 ok: [vhost1]
 
@@ -544,6 +545,25 @@ ok: [vhost1] => {
     ]
 
  ```
+
+* debug all at a time in jinja2 expression
+ ```
+ ---
+- hosts: vhost1
+  become: yes
+  tasks:
+          - name: system info
+            debug:
+                    msg: "{{ ansible_distribution }} {{ ansible_all_ipv4_addresses }} {{ ansible_selinux }} {{ ansible_nodename }} {{ ansible_all_ipv6_addresses }}"
+
+
+ .Result:
+  TASK [system info] ********************************************************************************************************************
+ok: [vhost1] => {
+    "msg": "RedHat ['192.168.122.1', '192.168.10.60', '10.0.3.15'] {'status': 'enabled', 'policyvers': 33, 'config_mode': 'enforcing', 'mode': 'enforcing', 'type': 'targeted'} venu60.git.com ['fe80::a00:27ff:fe7c:d90c', 'fd17:625c:f037:3:1cf7:f07f:d210:8253', 'fe80::c609:d72e:4300:b056']"
+}
+
+ ``` 
 
 
 
